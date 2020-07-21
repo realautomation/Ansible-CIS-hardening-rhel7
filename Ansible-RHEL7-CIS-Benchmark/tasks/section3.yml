@@ -1,0 +1,617 @@
+- name: "SCORED | 3.1.1 | PATCH | Ensure IP forwarding is disabled"
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '0'
+    state: present
+    reload: yes
+    ignoreerrors: yes
+    sysctl_set: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_is_router is defined and not rhel7cis_is_router
+  notify:
+    - sysctl flush ipv4 route table
+    - reload sysctl
+  tags:
+    - level1
+    - sysctl
+    - scored
+    - patch
+    - rule_3.1.1
+
+- name: "SCORED | 3.1.2 | PATCH | Ensure packet redirect sending is disabled"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  loop:
+    - { name: net.ipv4.conf.all.send_redirects, value: '0' }
+    - { name: net.ipv4.conf.default.send_redirects, value: '0' }
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_is_router is defined and not rhel7cis_is_router
+  notify:
+    - sysctl flush ipv4 route table
+    - reload sysctl
+  tags:
+    - level1
+    - scored
+    - patch
+    - rule_3.1.2
+
+- name: "SCORED | 3.2.1 | PATCH | Ensure source routed packets are not accepted"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  loop:
+    - { name: net.ipv4.conf.all.accept_source_route, value: '0' }
+    - { name: net.ipv4.conf.default.accept_source_route, value: '0' }
+  notify:
+    - sysctl flush ipv4 route table
+    - reload sysctl
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - scored
+    - patch
+    - rule_3.2.1
+
+- name: "SCORED | 3.2.2 | PATCH | Ensure ICMP redirects are not accepted"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  loop:
+    - { name: net.ipv4.conf.all.accept_redirects, value: '0' }
+    - { name: net.ipv4.conf.default.accept_redirects, value: '0' }
+  notify:
+    - sysctl flush ipv4 route table
+    - reload sysctl
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - scored
+    - patch
+    - rule_3.2.2
+
+- name: "SCORED | 3.2.3 | PATCH | Ensure secure ICMP redirects are not accepted"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  loop:
+    - { name: net.ipv4.conf.all.secure_redirects, value: '0' }
+    - { name: net.ipv4.conf.default.secure_redirects, value: '0' }
+  notify:
+    - sysctl flush ipv4 route table
+    - reload sysctl
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - scored
+    - patch
+    - rule_3.2.3
+
+- name: "SCORED | 3.2.4 | PATCH | Ensure suspicious packets are logged"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  loop:
+    - { name: net.ipv4.conf.all.log_martians, value: '1' }
+    - { name: net.ipv4.conf.default.log_martians, value: '1' }
+  notify:
+    - sysctl flush ipv4 route table
+    - reload sysctl
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - scored
+    - patch
+    - rule_3.2.4
+
+- name: "SCORED | 3.2.5 | PATCH | Ensure broadcast ICMP requests are ignored"
+  sysctl:
+    name: net.ipv4.icmp_echo_ignore_broadcasts
+    value: "1"
+    state: present
+    reload: yes
+    ignoreerrors: yes
+    sysctl_set: yes
+  notify:
+    - sysctl flush ipv4 route table
+    - reload sysctl
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_3.2.5
+
+- name: "SCORED | 3.2.6 | PATCH | Ensure bogus ICMP responses are ignored"
+  sysctl:
+    name: net.ipv4.icmp_ignore_bogus_error_responses
+    value: "1"
+    state: present
+    reload: yes
+    ignoreerrors: yes
+    sysctl_set: yes
+  notify:
+    - sysctl flush ipv4 route table
+    - reload sysctl
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_3.2.6
+
+- name: "SCORED | 3.2.7 | PATCH | Ensure Reverse Path Filtering is enabled"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  loop:
+    - { name: net.ipv4.conf.all.rp_filter, value: "1" }
+    - { name: net.ipv4.conf.default.rp_filter, value: "1" }
+  notify:
+    - sysctl flush ipv4 route table
+    - reload sysctl
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_3.2.7
+
+- name: "SCORED | 3.2.8 | PATCH | Ensure TCP SYN Cookies is enabled"
+  sysctl:
+    name: net.ipv4.tcp_syncookies
+    value: "1"
+    state: present
+    reload: yes
+    ignoreerrors: yes
+    sysctl_set: yes
+  notify:
+    - sysctl flush ipv4 route table
+    - reload sysctl
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_3.2.8
+
+- name: "SCORED | 3.3.1 | PATCH | Ensure IPv6 router advertisements are not accepted"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  loop:
+    - { name: net.ipv6.conf.all.accept_ra, value: "0" }
+    - { name: net.ipv6.conf.default.accept_ra, value: "0" }
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_ipv6_required is defined
+    - rhel7cis_ipv6_required
+  notify:
+    - sysctl flush ipv6 route table
+    - reload sysctl
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_3.3.1
+
+- name: "SCORED | 3.3.2 | PATCH | Ensure IPv6 redirects are not accepted"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  loop:
+    - { name: net.ipv6.conf.all.accept_redirects, value: "0" }
+    - { name: net.ipv6.conf.default.accept_redirects, value: "0" }
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_ipv6_required is defined
+    - rhel7cis_ipv6_required
+  notify:
+    - sysctl flush ipv6 route table
+    - reload sysctl
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_3.3.2
+
+- name: "NOTSCORED | 3.3.3 | PATCH | Ensure IPv6 is disabled"
+  lineinfile:
+    dest: /etc/modprobe.d/CIS.conf
+    regexp: "^(#)?options ipv6 disable="
+    line: "options ipv6 disable=1"
+    create: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_ipv6_required is defined
+    - not rhel7cis_ipv6_required
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_3.3.3
+
+- name: "SCORED | 3.4.1 | PATCH | Ensure TCP Wrappers is installed"
+  yum:
+    name: tcp_wrappers
+    state: present
+  ignore_errors: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_3.4.1
+
+- name: "SCORED | 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured"
+  template:
+    src: hosts.allow.j2
+    dest: /etc/hosts.allow
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+    - rhel7cis_enable_hosts_allow is defined and rhel7cis_enable_hosts_allow
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_3.4.2
+
+- name: "SCORED | 3.4.3 | PATCH | Ensure /etc/hosts.deny is configured"
+  lineinfile:
+    dest: /etc/hosts.deny
+    regexp: "^(#)?ALL"
+    line: "ALL: ALL"
+    backup: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_enable_hosts_deny is defined and rhel7cis_enable_hosts_deny
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_3.4.3
+
+- name: "SCORED | 3.4.4 | PATCH | Ensure permissions on /etc/hosts.allow are configured"
+  file:
+    dest: /etc/hosts.allow
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - rule_3.4.4
+    - scored
+
+- name: "SCORED | 3.4.5 | PATCH | Ensure permissions on /etc/hosts.deny are 644"
+  file:
+    dest: /etc/hosts.deny
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - rule_3.4.5
+    - scored
+
+- name: "NOTSCORED | 3.5.1 | PATCH | Ensure DCCP is disabled"
+  lineinfile:
+    dest: /etc/modprobe.d/CIS.conf
+    regexp: "^(#)?install dccp(\\s|$)"
+    line: "install dccp /bin/true"
+    create: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - rule_3.5.1
+    - notscored
+
+- name: "NOTSCORED | 3.5.2 | PATCH | Ensure SCTP is disabled"
+  lineinfile:
+    dest: /etc/modprobe.d/CIS.conf
+    regexp: "^(#)?install sctp(\\s|$)"
+    line: "install sctp /bin/true"
+    create: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - rule_3.5.2
+    - notscored
+
+- name: "NOTSCORED | 3.5.3 | PATCH | Ensure RDS is disabled"
+  lineinfile:
+    dest: /etc/modprobe.d/CIS.conf
+    regexp: "^(#)?install rds(\\s|$)"
+    line: "install rds /bin/true"
+    create: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - rule_3.5.3
+    - notscored
+
+- name: "NOTSCORED | 3.5.4 | PATCH | Ensure TIPC is disabled"
+  lineinfile:
+    dest: /etc/modprobe.d/CIS.conf
+    regexp: "^(#)?install tipc(\\s|$)"
+    line: "install tipc /bin/true"
+    create: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - rule_3.5.4
+    - notscored
+
+- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+  yum:
+    name: firewalld
+    state: present
+  ignore_errors: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_firewall is defined and rhel7cis_firewall == "firewalld"
+  tags:
+    - level1
+    - patch
+    - rule_3.6
+    - scored
+
+- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+  service:
+    name: firewalld
+    state: started
+    enabled: no
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_firewall is defined and rhel7cis_firewall == "firewalld"
+  tags:
+    - level1
+    - patch
+    - rule_3.6
+    - scored
+
+- name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed"
+  yum:
+    name: iptables-services
+    state: present
+  ignore_errors: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_firewall is defined and rhel7cis_firewall == "iptables"
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_3.6.1
+
+- name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed"
+  service:
+    name: iptables
+    state: started
+    enabled: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_firewall is defined and rhel7cis_firewall == "iptables"
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_3.6.1
+
+- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
+  iptables: 
+    chain: INPUT 
+    policy: DROP
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_firewall is defined and rhel7cis_firewall == "iptables"
+    - rhel7cis_default_deny_firewall is defined and rhel7cis_default_deny_firewall
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_3.6.2
+    - scored
+
+- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
+  iptables: 
+    chain: OUTPUT 
+    policy: DROP
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_firewall is defined and rhel7cis_firewall == "iptables"
+    - rhel7cis_default_deny_firewall is defined and rhel7cis_default_deny_firewall
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_3.6.2
+    - scored
+
+- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
+  iptables: 
+    chain: FORWARD 
+    policy: DROP
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_firewall is defined and rhel7cis_firewall == "iptables"
+    - rhel7cis_default_deny_firewall is defined and rhel7cis_default_deny_firewall
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_3.6.2
+    - scored
+
+
+- name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
+  iptables: 
+    chain: INPUT 
+    action: append 
+    in_interface: lo 
+    jump: ACCEPT
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_firewall is defined and rhel7cis_firewall == "iptables"
+    - rhel7cis_loopback_traffic_config is defined and rhel7cis_loopback_traffic_config
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_3.6.3
+    - scored
+
+
+- name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
+  iptables: 
+    chain: OUTPUT
+    action: append 
+    out_interface: lo 
+    jump: ACCEPT
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_firewall is defined and rhel7cis_firewall == "iptables"
+    - rhel7cis_loopback_traffic_config is defined and rhel7cis_loopback_traffic_config
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_3.6.3
+    - scored
+
+
+- name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
+  iptables: 
+    chain: INPUT 
+    source: 127.0.0.0/8 
+    jump: DROP
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_firewall is defined and rhel7cis_firewall == "iptables"
+    - rhel7cis_loopback_traffic_config is defined and rhel7cis_loopback_traffic_config
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_3.6.3
+    - scored
+
+- name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured -UDP"
+  iptables:
+    ip_version: ipv4
+    chain: INPUT
+    protocol: udp
+    match: state
+    ctstate: ESTABLISHED
+    jump: ACCEPT
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_firewall is defined and rhel7cis_firewall == "iptables"
+    - rhel7cis_firewall_outbound_rule is defined and rhel7cis_firewall_outbound_rule
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - notscored
+    - rule_3.6.4
+
+- name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured -ICMP"
+  iptables:
+    ip_version: ipv4
+    chain: INPUT
+    protocol: icmp
+    match: state
+    ctstate: ESTABLISHED
+    jump: ACCEPT
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_firewall is defined and rhel7cis_firewall == "iptables"
+    - rhel7cis_firewall_outbound_rule is defined and rhel7cis_firewall_outbound_rule
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - notscored
+    - rule_3.6.4
+
+- name: "SCORED | 3.6.5 | Ensure firewall rules exist for all open ports"
+  debug:
+    msg: "*** Manual Action Required *** "
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - scored
+    - rule_3.6.5
+
+- name: "NOTSCORED | 3.7 | Ensure wireless interfaces are disabled"
+  debug:
+    msg: "*** Manual Action Required *** "
+  when:
+    - rhel7cis_level2 is defined and rhel7cis_level2
+  tags:
+    - level1
+    - rule_3.7
+    - notscored

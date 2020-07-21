@@ -1,0 +1,14 @@
+---
+- hosts:  all
+  become: yes
+  become_method: sudo
+  gather_facts: true
+  roles:
+# Match role folder name here - Ansible-RHEL7-CIS-Benchmark
+    - role: Ansible-RHEL7-CIS-Benchmark
+  tags:
+    - always
+    - prelim_tasks
+    - level1
+    - post_tasks
+    - scored

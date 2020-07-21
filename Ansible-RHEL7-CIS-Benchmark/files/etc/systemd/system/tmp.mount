@@ -1,0 +1,8 @@
+#  This file is part of systemd.
+
+[Mount]
+What=tmpfs
+Where=/tmp
+Type=tmpfs
+Options=mode=1777,strictatime,noexec,nodev,nosuid
+

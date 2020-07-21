@@ -1,0 +1,966 @@
+- name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabled"
+  service:
+      name: crond
+      state: started
+      enabled: yes
+
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+      - level1
+      - patch
+      - scored
+      - rule_5.1.1
+
+- name: "SCORED | 5.1.2 | PATCH | Ensure permissions on /etc/crontab are configured"
+  file:
+      dest: /etc/crontab
+      owner: root
+      group: root
+      mode: 0600
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+      - level1
+      - patch
+      - scored
+      - rule_5.1.2
+
+- name: "SCORED | 5.1.3 | PATCH | Ensure permissions on /etc/cron.hourly are configured"
+  file:
+      dest: /etc/cron.hourly
+      owner: root
+      group: root
+      mode: 0600
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.1.3
+
+- name: "SCORED | 5.1.4 | PATCH | Ensure permissions on /etc/cron.daily are configured"
+  file:
+      dest: /etc/cron.daily
+      owner: root
+      group: root
+      mode: 0600
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.1.4
+
+- name: "SCORED | 5.1.5 | PATCH | Ensure permissions on /etc/cron.weekly are configured"
+  file:
+      dest: /etc/cron.weekly
+      owner: root
+      group: root
+      mode: 0600
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.1.5
+
+- name: "SCORED | 5.1.6 | PATCH | Ensure permissions on /etc/cron.monthly are configured"
+  file:
+      dest: /etc/cron.monthly
+      owner: root
+      group: root
+      mode: 0600
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.1.6
+
+- name: "SCORED | 5.1.7 | PATCH | Ensure permissions on /etc/cron.d are configured"
+  file:
+      dest: /etc/cron.d
+      state: directory
+      owner: root
+      group: root
+      mode: 0600
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.1.7
+
+- name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+  file:
+      dest: /etc/at.deny
+      state: absent
+  changed_when: false
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.1.8
+
+- name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+  file:
+      dest: /etc/at.allow
+      state: touch
+      owner: root
+      group: root
+      mode: 0600
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.1.8
+
+- name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+  file:
+    dest: /etc/cron.deny
+    state: absent
+  changed_when: false
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.1.8
+
+- name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+  file:
+    dest: /etc/cron.allow
+    state: touch
+    owner: root
+    group: root
+    mode: 0600
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.1.8
+
+- name: "SCORED | 5.2.1 | PATCH | Ensure permissions on /etc/ssh/sshd_config are configured"
+  file:
+    dest: /etc/ssh/sshd_config
+    state: file
+    owner: root
+    group: root
+    mode: 0600
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.1
+
+- name: "SCORED | 5.2.2 | PATCH | Ensure SSH Protocol is set to 2"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^Protocol'
+    line: 'Protocol {{ rhel7cis_ssh_protocol_value }}'
+    backup: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.2
+
+- name: "SCORED | 5.2.3 | PATCH | Ensure SSH LogLevel is set to INFO"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^LogLevel'
+    line: 'LogLevel {{ rhel7cis_ssh_loglevel }}'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.3
+
+- name: "SCORED | 5.2.4 | PATCH | Ensure SSH X11 forwarding is disabled"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^X11Forwarding'
+    line: 'X11Forwarding {{ rhel7cis_ssh_x11_forwarding }}'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.4
+
+- name: "SCORED | 5.2.5 | PATCH | Ensure SSH MaxAuthTries is set to 4 or less"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^#MaxAuthTries'
+    line: 'MaxAuthTries {{ rhel7cis_ssh_maxAuthTries_value }}'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.5
+
+- name: "SCORED | 5.2.6 | PATCH | Ensure SSH IgnoreRhosts is enabled"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^#IgnoreRhosts'
+    line: 'IgnoreRhosts {{ rhel7cis_ssh_ignoreRhosts }}'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.6
+
+- name: "SCORED | 5.2.7 | PATCH | Ensure SSH HostbasedAuthentication is disabled"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^#HostbasedAuthentication'
+    line: 'HostbasedAuthentication {{ rhel7cis_ssh_hostbasedauthentication }}'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.7
+
+- name: "SCORED | 5.2.8 | PATCH | Ensure SSH root login is disabled"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^#PermitRootLogin'
+    line: 'PermitRootLogin {{ rhel7cis_ssh_root_login }}'
+  when:
+    - rhel7cis_permit_ssh_root_login_disabled is defined and rhel7cis_permit_ssh_root_login_disabled
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.8
+
+- name: "SCORED | 5.2.9 | PATCH | Ensure SSH PermitEmptyPasswords is disabled"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^#PermitEmptyPasswords'
+    line: 'PermitEmptyPasswords {{ rhel7cis_ssh_permitEmptyPassword }}'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.9
+
+- name: "SCORED | 5.2.10 | PATCH | Ensure SSH PermitUserEnvironment is disabled"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^#PermitUserEnvironment'
+    line: 'PermitUserEnvironment {{ rhel7cis_ssh_permitUserEnvironment }}'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.10
+
+- name: "SCORED | 5.2.11 | PATCH | Ensure only approved MAC algorithms are used"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    line: 'MACs {{ rhel7cis_ssh_mac_algorithms }}'
+    create: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_ssh_mac_algorithms is defined
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.11
+
+- name: "SCORED | 5.2.12 | PATCH | Ensure SSH Idle Timeout Interval is configured"
+  lineinfile:
+    state: absent
+    dest: /etc/ssh/sshd_config
+    regexp: '^ClientAliveInterval (?!300)'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.12
+
+- name: "SCORED | 5.2.12 | PATCH | Ensure SSH Idle Timeout Interval is configured"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^#ClientAliveInterval(.*)?$'
+    line: 'ClientAliveInterval {{ rhel7cis_ssh_clientAliveInterval }}'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.12
+
+- name: "SCORED | 5.2.12 | PATCH | Ensure SSH Idle Timeout Interval is configured"
+  lineinfile:
+    state: absent
+    dest: /etc/ssh/sshd_config
+    regexp: '^ClientAliveCountMax (?!0)'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.12
+
+- name: "SCORED | 5.2.12 | PATCH | Ensure SSH Idle Timeout Interval is configured"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^#ClientAliveCountMax(.*)?$'
+    line: 'ClientAliveCountMax {{ rhel7cis_ssh_clientAliveCountMax }}'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.12
+
+- name: "SCORED | 5.2.13 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^#LoginGraceTime'
+    line: 'LoginGraceTime {{ rhel7cis_ssh_loginGraceTime }}'
+  notify:
+    - restart sshd
+
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.2.13
+
+- name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited"
+  block:
+      - name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited - allowusers"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "(?i)^AllowUsers"
+            line: AllowUsers {{ rhel7cis_sshd['allowusers'] }}
+        notify:
+            - restart sshd
+        when:
+            - rhel7cis_sshd['allowusers'] | default('')
+            - rhel7cis_ssh_access_limited is defined and rhel7cis_ssh_access_limited
+            - rhel7cis_level1 is defined and rhel7cis_level1
+            - rhel7cis_noauto is defined and rhel7cis_noauto
+        tags:
+            - level1
+            - patch
+            - rule_5.2.14
+
+      - name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited - allowgroups"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "(?i)^AllowGroups"
+            line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
+        notify:
+            - restart sshd
+        when:
+            - rhel7cis_sshd['allowgroups'] | default('')
+            - rhel7cis_ssh_access_limited is defined and rhel7cis_ssh_access_limited
+            - rhel7cis_level1 is defined and rhel7cis_level1
+            - rhel7cis_noauto is defined and rhel7cis_noauto
+        tags:
+            - level1
+            - patch
+            - scored
+            - rule_5.2.14
+
+      - name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited - denyusers"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "(?i)^DenyUsers"
+            line: DenyUsers {{ rhel7cis_sshd['denyusers'] }}
+        notify:
+            - restart sshd
+        when:
+            - rhel7cis_sshd['denyusers'] | default('')
+            - rhel7cis_ssh_access_limited is defined and rhel7cis_ssh_access_limited
+            - rhel7cis_level1 is defined and rhel7cis_level1
+            - rhel7cis_noauto is defined and rhel7cis_noauto
+        tags:
+            - level1
+            - patch
+            - scored
+            - rule_5.2.14
+
+
+      - name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited - denygroups"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "(?i)^DenyGroups"
+            line: DenyGroups {{ rhel7cis_sshd['denygroups'] }}
+        notify:
+            - restart sshd
+        when:
+            - rhel7cis_sshd['denygroups'] | default('')
+            - rhel7cis_ssh_access_limited is defined and rhel7cis_ssh_access_limited
+            - rhel7cis_level1 is defined and rhel7cis_level1
+            - rhel7cis_noauto is defined and rhel7cis_noauto
+        tags:
+            - level1
+            - patch
+            - rule_5.2.14
+
+- name: "SCORED | 5.2.15 | PATCH | Ensure SSH warning banner is configured"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^#Banner'
+    line: 'Banner /etc/issue.net'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level
+    - patch
+    - scored
+    - rule_5.2.15
+
+- name: "SCORED | 5.3.1 | PATCH | Ensure password creation requirements are configured"
+  lineinfile:
+    state: present
+    dest: /etc/security/pwquality.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    create: yes
+  with_items:
+    - { regexp: "^#?minlen=", line: "minlen = {{ rhel7cis_pwquality_minlen }}" }
+    - { regexp: "^#?dcredit=", line: "dcredit = {{ rhel7cis_pwquality_dcredit }}" }
+    - { regexp: "^#?ucredit=", line: "ucredit = {{ rhel7cis_pwquality_ucredit }}" }
+    - { regexp: "^#?ocredit=", line: "ocredit = {{ rhel7cis_pwquality_ocredit }}" }
+    - { regexp: "^#?lcredit=", line: "lcredit = {{ rhel7cis_pwquality_lcredit }}" }
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_password_creation_requirements is defined and rhel7cis_password_creation_requirements 
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.3.1
+    - scored
+
+- name: "SCORED | 5.3.2 | Ensure lockout for failed password attempts is configured
+         SCORED | 5.3.3 | Ensure password reuse is limited - for password-auth and system-auth"
+  template:
+    src: 'templates/{{ item.src }}'
+    dest: '/etc/pam.d/{{ item.dest }}'
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  with_items:
+    - { src: 'password-auth-local.j2', dest: 'password-auth-local' }
+    - { src: 'system-auth-local.j2', dest: 'system-auth-local' }
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.3.2
+    - rule_5.3.3
+    - scored
+    
+
+- name: "SCORED | 5.3.2 | Ensure lockout for failed password attempts is configured
+         SCORED | 5.3.3 | Ensure password reuse is limited - Link password|system-auth-local to password|system-auth"
+  file:
+    src: '/etc/pam.d/{{ item.src }}'
+    dest: '/etc/pam.d/{{ item.dest }}'
+    owner: root
+    group: root
+    state: link
+  with_items:
+    - { src: 'password-auth-local', dest: 'password-auth' }
+    - { src: 'system-auth-local', dest: 'system-auth' }
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.3.2
+    - rule_5.3.3
+    - scored
+
+
+- name: 'SCORED | 5.3.4 | PATCH | Ensure password hashing algorithm is SHA-512 -  Check password hashing algorithm is SHA-512'
+  command: awk /sha512/ /etc/pam.d/password-auth
+  register: sha512_check_passwrd_auth
+  changed_when: false
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+     - level1
+     - patch
+     - rule_5.3.4
+     - scored
+
+- name: 'SCORED | 5.3.4 | PATCH | Ensure password hashing algorithm is SHA-512 -  Check password hashing algorithm is SHA-512'
+  command: awk /sha512/ /etc/pam.d/system-auth
+  register: sha512_check_system_auth
+  changed_when: false
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+     - level1
+     - patch
+     - rule_5.3.4
+     - scored
+
+
+- name: 'SCORED | 5.3.4 | PATCH | Ensure password hashing algorithm is SHA-512'
+  pamd:
+    name: password-auth
+    type: password
+    control: sufficient
+    module_path: 'pam_unix.so'
+    module_arguments: 'sha512'
+    state: args_present
+  when: 
+    - sha512_check_passwrd_auth.stdout | length == 0
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  changed_when: false
+  tags:
+     - level1
+     - patch
+     - scored
+     - rule_5.3.4
+
+
+- name: 'SCORED | 5.3.4 | PATCH | Ensure password hashing algorithm is SHA-512 - Ensure all password configuration is up to date'
+  pamd:
+    name: system-auth
+    type: password
+    control: sufficient
+    module_path: 'pam_unix.so'
+    module_arguments: 'sha512'
+    state: args_present
+  when:
+    - sha512_check_system_auth.stdout | length == 0
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+     - level1
+     - patch
+     - scored
+     - rule_5.3.4
+
+- name: "SCORED | 5.4.1.1 | PATCH | Ensure password expiration is 365 days or less - Obtain a list of user accounts"
+  shell: "egrep ^[^:]+:[^\\!*] /etc/shadow | cut -d: -f1 |awk '{if(NR>1)print}'"
+  register: egrep_5_4_1_1
+  check_mode: no
+  changed_when: false
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_password_expiration is defined and rhel7cis_password_expiration
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.4.1.1
+    
+
+- name: "SCORED | 5.4.1.1 | PATCH | Ensure password expiration is 365 days or less"
+  lineinfile:
+    dest: "/etc/login.defs"
+    regexp: "^PASS_MAX_DAYS\\s+"
+    line: "PASS_MAX_DAYS {{ rhel7_pass_max_days }}"
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_password_expiration is defined and rhel7cis_password_expiration
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.4.1.1
+
+- name: "SCORED | 5.4.1.1 | PATCH | Ensure password expiration is 365 days or less - Set password expiration for all user accounts"
+  shell: "chage --maxdays {{ rhel7_pass_max_days }} {{ item }}"
+  with_items:
+    - "{{ egrep_5_4_1_1.stdout_lines|default([]) }}"
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_password_expiration is defined and rhel7cis_password_expiration
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.4.1.1
+
+
+- name: "SCORED | 5.4.1.2 | PATCH | Ensure minimum days between password changes is 7 or more -  Obtain a list of user accounts"
+  shell: "egrep ^[^:]+:[^\\!*] /etc/shadow | cut -d: -f1 |awk '{if(NR>1)print}'"
+  register: egrep_5_4_1_2
+  check_mode: no
+  changed_when: false
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_password_minimum_days_password_change is defined and rhel7cis_password_minimum_days_password_change
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.4.1.2
+    - scored
+
+- name: "SCORED | 5.4.1.2 | PATCH | Ensure minimum days between password changes is 7 or more"
+  lineinfile:
+      state: present
+      dest: /etc/login.defs
+      regexp: "^PASS_MIN_DAYS\\s+"
+      line: "PASS_MIN_DAYS {{ rhel7_pass_min_days }}"
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_password_minimum_days_password_change is defined and rhel7cis_password_minimum_days_password_change
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - scored
+    - rule_5.4.1.2
+
+- name: "SCORED | 5.4.1.2 | PATCH | Ensure minimum days between password changes is 7 or more - Set minimum number of days between password change for all user accounts"
+  shell: "chage --mindays {{ rhel7_pass_min_days }} {{ item }}"
+  with_items:
+    - "{{ egrep_5_4_1_2.stdout_lines|default([]) }}"
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_password_minimum_days_password_change is defined and rhel7cis_password_minimum_days_password_change
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.4.1.2
+    - scored
+
+- name: "SCORED | 5.4.1.3 | PATCH | Ensure password expiration warning days is 7 or more - Obtain a list of user accounts"
+  shell: "egrep ^[^:]+:[^\\!*] /etc/shadow | cut -d: -f1 |awk '{if(NR>1)print}'"
+  register: egrep_5_4_1_3
+  check_mode: no
+  changed_when: false
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_password_expiration_warning is defined and rhel7cis_password_expiration_warning
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.4.1.3
+    - scored
+
+- name: "SCORED | 5.4.1.3 | PATCH | Ensure password expiration warning days is 7 or more"
+  lineinfile:
+      state: present
+      dest: /etc/login.defs
+      regexp: "^PASS_WARN_AGE\\s+"
+      line: "PASS_WARN_AGE {{ rhel7_pass_warn_days }}"
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_password_expiration_warning is defined and rhel7cis_password_expiration_warning
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.4.1.3
+    - scored
+
+- name: "SCORED | 5.4.1.3 | PATCH | Ensure password expiration warning days is 7 or more - Set password expiration warning for all user accounts"
+  shell: "chage --warndays {{ rhel7_pass_warn_days }} {{ item }}"
+  with_items:
+    - "{{ egrep_5_4_1_3.stdout_lines|default([]) }}"
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_password_expiration_warning is defined and rhel7cis_password_expiration_warning
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.4.1.3
+    - scored
+
+
+- name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Obtain a list of user accounts"
+  shell: "egrep ^[^:]+:[^\\!*] /etc/shadow | cut -d: -f1 |awk '{if(NR>1)print}'"
+  register: egrep_5_4_1_4
+  check_mode: no
+  changed_when: false
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_inactive_password_lock is defined and rhel7cis_inactive_password_lock
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.4.1.4
+    - scored
+ 
+- name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Set the default password inactivity period to 30 days"
+  command: useradd -D -f 30
+  changed_when: false
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_inactive_password_lock is defined and rhel7cis_inactive_password_lock
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.4.1.4
+    - scored
+
+- name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Set inactive password lock for all user accounts"
+  shell: "chage --inactive {{ rhel7cis_inactive_pass_lck }} {{ item }}"
+  with_items:
+    - "{{ egrep_5_4_1_4.stdout_lines|default([]) }}"
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_inactive_password_lock is defined and rhel7cis_inactive_password_lock
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.4.1.4
+    - scored
+
+- name: "SCORED | 5.4.1.5 | Ensure all users last password change date is in the past (Scored)"
+  debug:
+    msg: '*** Manual Action Required ***'
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - rule_5.4.1.5
+    - scored
+
+- name: "SCORED | 5.4.2 | Ensure system accounts are non-login | Except 'root' "
+  shell: "awk -F: '($1!= \"root\" && $1!= \"sync\" && $1!= \"shutdown\" && $1!= \"halt\" && $3< {{ rhel7cis_rule_5_4_2_min_uid }} && $7!= \"/sbin/nologin\" && $7!= \"/bin/false\") {print $1}' /etc/passwd"
+  changed_when: no
+  check_mode: no
+  register: system_account
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_ensure_system_accounts_are_non_login is defined and rhel7cis_ensure_system_accounts_are_non_login
+  tags:
+    - level1
+    - rule_5.4.2
+    - scored
+
+- name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login | Except 'root' "
+  shell: "usermod -s /sbin/nologin {{ item }}"
+  with_items:
+      - "{{ system_account.stdout_lines }}"
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_ensure_system_accounts_are_non_login is defined and rhel7cis_ensure_system_accounts_are_non_login
+    - system_account.stdout | length > 0
+  tags:
+    - level1
+    - patch
+    - rule_5.4.2
+    - scored
+
+- name: "SCORED | 5.4.3 | PATCH | Ensure default group for the root account is GID 0"
+  command: usermod -g 0 root
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+  tags:
+    - level1
+    - patch
+    - rule_5.4.3
+
+- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive"
+  lineinfile:
+    state: present
+    regexp: "^umask\\s+"
+    line: "umask {{ rhel7cis_umask_default }}"
+    dest: "{{ item }}"
+  with_items: "{{ rhel7cis_umask_shell_files }}"
+  ignore_errors: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_modify_default_user_umask is defined and rhel7cis_modify_default_user_umask
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+
+  tags:
+    - level1
+    - patch
+    - rule_5.4.4
+    - scored
+
+- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - Obtain the list of .sh files from /etc/profile.d"
+  find:
+    paths: /etc/profile.d
+    file_type: file
+    recurse: Yes
+    patterns: "*.sh"
+  register: files_matched
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_modify_default_user_umask is defined and rhel7cis_modify_default_user_umask
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+
+  tags:
+    - level1
+    - patch
+    - rule_5.4.4
+    - scored
+
+
+- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - Setting the umask in .sh files present in /etc/profile.d"
+  lineinfile:
+    state: present
+    regexp: "^umask\\s+"
+    insertafter: EOF
+    line: "umask {{ rhel7cis_umask_default }}"
+    path: "{{ item.path }}"
+    create: yes
+  loop: "{{ files_matched.files|flatten(levels=1) }}"
+  loop_control:
+    label: "{{ item.path }}"
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_modify_default_user_umask is defined and rhel7cis_modify_default_user_umask
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.4.4
+    - scored
+
+
+- name: "SCORED | 5.4.5 | PATCH | Ensure default user shell timeout is 900 seconds or less"
+  lineinfile:
+    state: present
+    dest: /etc/bashrc
+    regexp: '^TMOUT'
+    line: 'TMOUT=600'
+    backup: yes
+  when:
+    - rhel7cis_level2 is defined and rhel7cis_level2
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level2
+    - patch
+    - rule_5.4.5
+    - scored
+
+- name: "SCORED | 5.4.5 | PATCH | Ensure default user shell timeout is 900 seconds or less"
+  lineinfile:
+    state: present
+    dest: /etc/profile
+    regexp: '^TMOUT'
+    line: 'TMOUT=600'
+    backup: yes
+  when:
+    - rhel7cis_level2 is defined and rhel7cis_level2
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level2
+    - patch
+    - rule_5.4.5
+    - scored
+
+- name: "SCORED | 5.6 | PATCH | Ensure access to the su command is restricted -  Configure wheel group members who can access the su command"
+  lineinfile:
+    state: present
+    dest: /etc/group
+    regexp: '^wheel:x:10:(.*)$'
+    line: 'wheel:x:10:{{ rhel7cis_wheel_group_members }}'
+    backrefs: yes
+    backup: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_access_su_restricted is defined and rhel7cis_access_su_restricted
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.6
+    - scored
+
+- name: "SCORED | 5.6 | PATCH | Ensure access to the su command is restricted"
+  lineinfile:
+    state: present
+    dest: /etc/pam.d/su
+    regexp: '^auth\s+required\s+pam_wheel\.so'
+    line: 'auth  required  pam_wheel.so use_uid'
+    backup: yes
+  when:
+    - rhel7cis_level1 is defined and rhel7cis_level1
+    - rhel7cis_access_su_restricted is defined and rhel7cis_access_su_restricted
+    - rhel7cis_noauto is defined and rhel7cis_noauto
+  tags:
+    - level1
+    - patch
+    - rule_5.6
+    - scored

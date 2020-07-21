@@ -1,0 +1,81 @@
+---
+# handlers file for Ansible-RHEL7-CIS-Benchmark
+
+- name: restart auditd
+  become: yes
+  command: /sbin/service auditd restart
+
+- name: restart rsyslog
+  become: yes
+  command: pkill -HUP rsyslogd
+
+- name: restart syslog-ng
+  become: yes
+  command: pkill -HUP syslog-ng
+
+- name: sysctl flush ipv4 route table
+  become: yes
+  sysctl:
+    name: net.ipv4.route.flush
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: sysctl flush ipv6 route table
+  become: yes
+  sysctl:
+    name: net.ipv6.route.flush
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: systemd restart tmp.mount
+  become: yes
+  systemd:
+    name: tmp.mount
+    daemon_reload: yes
+    enabled: yes
+    masked: no
+    state: reloaded
+
+- name: generate new grub config
+  become: yes
+  command: "grub2-mkconfig -o /boot/grub2/grub.cfg"
+
+- name: reload sysctl
+  become: yes
+  command: "sysctl -p"
+
+- name: restart ntp or chrony
+  become: yes
+  service:
+    name: "{{ rhel7cis_time_synchronization }}d"
+    state: restarted
+
+- name: reload service firewalld
+  become: yes
+  systemd:
+    name: firewalld
+    state: reloaded
+
+
+- name: restart xinetd
+  become: yes
+  service:
+    name: xinetd
+    state: restarted
+
+- name: systemctl restart postfix
+  become: yes
+  service:
+    name: postfix
+    state: restarted
+
+- name: restart sshd
+  service:
+      name: sshd
+      state: restarted
+  ignore_errors: true
+

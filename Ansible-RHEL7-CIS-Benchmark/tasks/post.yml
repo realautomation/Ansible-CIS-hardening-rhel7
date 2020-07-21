@@ -1,0 +1,7 @@
+---
+# Post tasks
+
+- name: Perform YUM package cleanup
+  yum:
+    autoremove: yes
+  ignore_errors: yes

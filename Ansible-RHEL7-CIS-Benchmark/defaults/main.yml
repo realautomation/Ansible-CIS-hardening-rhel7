@@ -1,0 +1,369 @@
+---
+# defaults file for Ansible-RHEL7-CIS-Benchmark
+
+# Define what sections to run
+# Run CIS checks that we typically do NOT want to automate due to the high probability of breaking the system
+rhel7cis_noauto: false
+# 1-Initial-Setup
+rhel7cis_section1: true
+# 2-Services
+rhel7cis_section2: true
+# 3-Network-Configuration
+rhel7cis_section3: true
+# 4-Logging-and-Auditing
+rhel7cis_section4: true
+# 5-Access, Authentication and Authorization
+rhel7cis_section5: true
+# 6-System-Maintenance
+rhel7cis_section6: true
+
+# Set to true to run either level1, level2, or set both to true to run level1 and level2 checks.
+rhel7cis_level1: true
+rhel7cis_level2: false
+
+############################
+### Section 1 Parameters ###
+############################
+
+# Section 1.2.5 | Disable the rhnsd Daemon
+# set 'true' to keep the service
+rhel7cis_rhnsd_required: false
+
+# Section AIDE #
+# Section 1.3.1 | Ensure AIDE is installed and configured
+## if 'true' then it will install 'AIDE' in the server
+rhel7cis_config_aide: true
+
+# Section 1.3.2 | Ensure filestystem integrity is regularly checked | AIDE cron settings
+rhel7cis_aide_cron:
+  cron_file: /var/spool/cron/root
+  aide_job: '/usr/sbin/aide --check'
+  aide_minute: 0
+  aide_hour: 5
+  aide_day: '*'
+  aide_month: '*'
+  aide_weekday: '*'
+
+
+# SELinux Section #
+# Section 1.6.1.2 & 1.6.1.3 | Ensure SELinux state is enforcing and configured
+# true = SELinux is disabled | false = SELinux is enabled
+rhel7cis_selinux_disable: false
+
+# Section 1.6.1.2 & 1.6.1.3 | SELinux policy
+rhel7cis_selinux_pol: targeted
+
+# MOTD Section #
+# Section 1.7.1.1 | Ensure message of the day is configured properly
+# Warning Banner Content (issue, issue.net, motd)
+rhel7cis_warning_banner: |
+    Authorized uses only. All activity may be monitored and reported.
+# End Banner
+
+# System package updates #
+# Section 1.8 | Ensure updates of software repos and system packages are up-to-date | Run yum update
+## true = yum update is enabled | false = yum update is disabled
+rhel7cis_update: false
+
+############################
+### Section 2 Parameters ###
+############################
+# Set this to false to prevent disabling of services.
+# Value of true will disable all services listed below not set to true.
+# Value of false will skip the disabling of services listed below.
+# The disable_service_checks can also be enabled via the skip tag function by skipping "disable_service_checks" tag to the running playbook
+rhel7cis_disable_service_checks: true
+
+# Set this value to 'true' if the machine is joined to AD/LDAP server.
+# Set this value to 'false' if the machine is not joined to AD/LDAP server.
+rhel7cis_ad_ldap_joined_machine: false
+
+# Service configuration booleans set 'true' to keep service
+## 'true' = Services are enabled | 'false' = Services are disabled
+rhel7cis_cups_server: false
+rhel7cis_dhcp_server: false
+rhel7cis_ldap_server: false
+rhel7cis_telnet_server: false
+rhel7cis_nfs_server: false
+rhel7cis_rpc_server: false
+rhel7cis_ntalk_server: false
+rhel7cis_rsyncd_server: false
+rhel7cis_tftp_server: false
+rhel7cis_rsh_server: false
+rhel7cis_nis_server: false
+rhel7cis_snmp_server: false
+rhel7cis_squid_server: false
+rhel7cis_smb_server: false
+rhel7cis_dovecot_server: false
+rhel7cis_httpd_server: false
+rhel7cis_vsftpd_server: false
+rhel7cis_named_server: false
+rhel7cis_nfs_rpc_server: false
+rhel7cis_is_mail_server: false
+rhel7cis_bind: false
+rhel7cis_vsftpd: false
+rhel7cis_httpd: false
+rhel7cis_dovecot: false
+rhel7cis_samba: false
+rhel7cis_squid: false
+rhel7cis_net_snmp: false
+rhel7cis_allow_autofs: false
+
+rhel7cis_openldap_clients_required: false
+rhel7cis_telnet_required: false
+rhel7cis_talk_required: false
+rhel7cis_rsh_required: false
+rhel7cis_ypbind_required: false
+
+# Section 2.1.7 | Ensure xinetd is not enabled
+## 'true' = xinetd service is enabled | 'false' = xinetd service is disabled
+rhel7cis_xinetd_required: false
+
+
+# Section 2.2.1.x | Time synchronization #
+# Time Synchronization - Use chrony or ntp(d) | default: chrony
+rhel7cis_time_synchronization: chrony
+
+rhel7cis_time_synchronization_servers:
+    - 0.pool.ntp.org
+    - 1.pool.ntp.org
+    - 2.pool.ntp.org
+    - 3.pool.ntp.org
+
+# Section 2.2.2 | Ensure X Window System is not installed
+# Set to 'true' if X Windows is needed in your environment
+rhel7cis_xwindows_required: false
+
+# Section 2.2.3 | Ensure avahi server is not enabled
+# Set to 'true' if Avahi Server is needed in your environment
+rhel7cis_avahi_server: false
+
+############################
+### Section 3 Parameters ###
+############################
+
+# Section 3.1.1 & 3.1.2 | Ensure IP forwarding is disabled and Ensure packet redirect sending is disabled
+# These rules can only be configured on non-host and router configurations
+
+# System network parameters (host only OR host and router)
+# if host only = false OR host and router = true
+rhel7cis_is_router: false
+
+# 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured
+# If 'true' it will configure /etc/hosts.allow
+rhel7cis_enable_hosts_allow: false
+
+# Change the IP addresses which are permitted to connect to the host
+rhel7cis_host_allow:
+    - "10.0.0.0/255.0.0.0"
+    - "172.16.0.0/255.240.0.0"
+    - "192.168.0.0/255.255.0.0"
+
+# 3.4.3 | Ensure /etc/hosts.deny is configured
+# If 'true' it will configure /etc/hosts.deny
+rhel7cis_enable_hosts_deny: false
+
+# Section 3.6.1 | Ensure iptables is installed
+# Selection of firewall package to use below | default: iptables
+#iptables OR firewalld
+rhel7cis_firewall: firewalld
+
+# Changing firewall settings while connected over network can result in being locked out of the system
+# if "true" it may cause locked out of the system
+# Section 3.6.2 | Ensure default deny firewall policy
+rhel7cis_default_deny_firewall: false
+
+# Section 3.6.3 | Ensure loopback traffic is configured
+# if "true" it will configure loopback traffic in the system
+rhel7cis_loopback_traffic_config: true
+
+# Section 3.6.4 | Ensure outbound and established connections are configured
+# if "true" it will configure outbound and established connections in the system
+rhel7cis_firewall_outbound_rule: false
+
+############################
+### Section 4 Parameters ###
+############################
+# Section 4.1.1.1 | Ensure audit log storage size is configured
+rhel7cis_max_log_file: 10
+
+# Section 4.1.1.2 | Ensure system is disabled when audit logs are full
+rhel7cis_space_left_action: email
+rhel7cis_action_mail_acct: root
+rhel7cis_admin_space_left_action: halt 
+
+# Section 4.1.1.3 | Ensure audit logs are not automatically deleted
+rhel7cis_max_log_file_action: keep_logs
+
+# Section 4.1.2 | Enable auditd
+rhel7cis_enable_auditd: true
+
+rhel7cis_sudolog: /var/log/secure
+
+# System Accounting and Logging
+# Set logging service to 'true'
+rhel7cis_log_server: true
+
+
+## The rsyslog software is recommended as a replacement for the syslogd daemon 
+## and provides improvements over syslogd, such as connection-oriented 
+## (i.e. TCP) transmission of logs, the option to log to database formats, 
+## and the encryption of log data en route to a central logging server.
+
+# Enable system auditing | Select rsyslog or syslog_ng from the settings below #
+# rsyslog settings are sections 4.2.1.x
+# syslog_ng settings are sections 4.2.2.x
+
+# Section 4.2.1.x | rsyslog settings
+# IF using rsyslog, set to true and loghost_address should be reflected here
+rhel7cis_rsyslog: true
+# Change the loghost_address as per environment
+rhel7cis_rsyslog_loghost_address: 10.0.0.0
+
+# Section 4.2.2.x | syslog_ng settings
+# IF using syslog_ng, set to true and loghost_address should be reflected here
+rhel7cis_syslog_ng: false
+# Change the loghost_address as per environment
+rhel7cis_syslog_ng_loghost_address: 10.0.0.0
+
+############################
+### Section 5 Parameters ###
+############################
+
+# Section 5.2.2 | Ensure SSH Protocol is set to 2
+rhel7cis_ssh_protocol_value: 2
+
+# Section 5.2.3 | Ensure SSH LogLevel is set to INFO
+rhel7cis_ssh_loglevel: INFO
+
+# Section 5.2.4 | Ensure SSH X11 forwarding is disabled
+rhel7cis_ssh_x11_forwarding: 'no'
+
+# Section 5.2.5 | Ensure SSH MaxAuthTries is set to 4 or less
+rhel7cis_ssh_maxAuthTries_value: 4
+
+# Section 5.2.6 | Ensure SSH IgnoreRhosts is enabled
+rhel7cis_ssh_ignoreRhosts: 'yes'
+
+# Section 5.2.7 | Ensure SSH HostbasedAuthentication is disabled
+rhel7cis_ssh_hostbasedauthentication: 'no'
+
+# Section 5.2.8 | Ensure SSH root login is disabled
+## Set this 'true' only if you want to disable root login
+## # if "true" it may cause locked out of the system
+rhel7cis_permit_ssh_root_login_disabled: false
+rhel7cis_ssh_root_login: 'no'
+
+# Section 5.2.9 | Ensure SSH PermitEmptyPasswords is disabled
+rhel7cis_ssh_permitEmptyPassword: 'no'
+
+# Section 5.2.10 | Ensure SSH PermitUserEnvironment is disabled
+rhel7cis_ssh_permitUserEnvironment: 'no'
+
+# Section 5.2.11 | Ensure only strong MAC algorithms are used
+rhel7cis_ssh_mac_algorithms: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com"
+
+# Section 5.2.12 | Ensure SSH Idle Timeout Interval is configured
+rhel7cis_ssh_clientAliveInterval: 300
+rhel7cis_ssh_clientAliveCountMax: 0
+
+# Section 5.2.13 | Ensure SSH LoginGraceTime is set to one minute or less
+rhel7cis_ssh_loginGraceTime: 60
+
+# Section 5.2.14 | Ensure SSH access is limited
+## Set this 'true' only if you want to limit the SSH access
+rhel7cis_ssh_access_limited: true
+# Make sure you understand the precedence when working with these values!!
+rhel7cis_sshd:
+     allowusers: root
+     allowgroups: root
+     denyusers:
+     denygroups:
+
+# Section 5.3.1 | Ensure password creation requirements are configured
+rhel7cis_password_creation_requirements: true
+# Minimum number of characters required for passwords
+rhel7cis_pwquality_minlen: "14"
+# At least one digit must be provided
+rhel7cis_pwquality_dcredit: "-1"
+# At least one uppercase character must be provided
+rhel7cis_pwquality_ucredit: "-1"
+# At least one special character must be provided
+rhel7cis_pwquality_ocredit: "-1"
+# At least one lowercase character must be provided
+rhel7cis_pwquality_lcredit: "-1"
+
+# Section 5.3.2 | Ensure lockout for failed password attempts is configured
+# Number of failed login attempts before account locked
+rhel7cis_pwfailed_attempts: "5"
+
+# Time in seconds before the login attempt can be tried again without auto failing
+rhel7cis_pwunlock_time: "900"
+
+# Section 5.3.3 | Ensure password reuse is limited
+# Number of times a password can be attempted before sending back a failure
+rhel7cis_pwretry_number: "3"
+
+# Ensure password reuse is limited to this number
+rhel7cis_pwreuse_number: "5"
+
+# Options are sha512 or md5
+rhel7cis_passwd_hash: "sha512"
+
+# Section 5.4.1.1 | Ensure password expiration is 365 days or less
+## if 'true' then it will set the password expiration to 90 days
+rhel7cis_password_expiration: true
+rhel7_pass_max_days: 90
+
+# Section 5.4.1.2 | Ensure minimum days between password changes is 7 or more
+## if 'true' then it will set the minimum days between password changes to 7
+rhel7cis_password_minimum_days_password_change: true
+rhel7_pass_min_days: 7
+
+# Section 5.4.1.3 | Ensure password expiration warning days is 7 or more
+## if 'true' then it will set the password expiration warning days to 7
+rhel7_pass_warn_days: 7
+rhel7cis_password_expiration_warning: true
+
+# Section 5.4.1.4 | Ensure inactive password lock is 30 days or less
+## if 'true' then it will set the inactive password lock to 30 days
+rhel7cis_inactive_password_lock: true
+rhel7cis_inactive_pass_lck: 30 
+
+# Section 5.4.2 | Ensure system accounts are non-login
+## if 'true' then it will set the system accounts to non-login
+rhel7cis_ensure_system_accounts_are_non_login: true
+rhel7cis_rule_5_4_2_min_uid: 1000
+
+# Section 5.4.4 | Ensure default user umask is 027 or more restrictive
+## if 'true' then it will set the user umask to 027
+rhel7cis_modify_default_user_umask: true
+rhel7cis_umask_default: "027"
+rhel7cis_umask_shell_files:
+                      - /etc/bashrc
+                      - /etc/profile
+
+# Section 5.6 Ensure access to the su command is restricted
+## if 'true' then it will limit the SSH access
+rhel7cis_access_su_restricted: true
+rhel7cis_wheel_group_members: "root"
+
+############################
+### Section 6 Parameters ###
+############################
+
+# Section 6.2.8 | Ensure users' home directory permissions are 750 or more restrictive
+## if 'true' then it will set the user's home directory permissions to 750
+rhel7cis_modify_user_homes: true
+
+# Section 6.2.11 | Ensure no users have .forward files
+# Set 'false' to keep .forward files
+rhel7cis_modify_dot_forward_files: true
+
+# Section 6.2.12 | Ensure no users have .netrc files
+# Set 'false' to keep .netrc files 
+rhel7cis_modify_dot_netrc_files: true
+
+# Section 6.2.14 | Ensure no users have .rhosts files
+# Set 'false' to keep .rhosts files
+rhel7cis_modify_dot_rhosts_files: true

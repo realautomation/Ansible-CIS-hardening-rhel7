@@ -1,0 +1,72 @@
+---
+# tasks file for Ansible-RHEL7-CIS-Benchmark
+- name: "Check OS version and family"
+  fail:
+    msg: "This role can only be run against CentOS 7.x or RHEL 7.x. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
+  when:
+    - ansible_distribution|lower == 'CentOS' or ansible_distribution|lower == 'RedHat'
+    - ansible_distribution_major_version is version_compare('7', '!=')
+  tags:
+    - always
+  
+- name: "Check OS version and family"
+  debug:
+    msg: "PASS | The detected OS is {{ ansible_distribution }} {{ ansible_distribution_major_version }}."  
+  when:
+    - ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+  tags:
+    - always
+
+- name: "Check ansible version"
+  fail:
+    msg: "You must use ansible 2.5 or greater"
+  when: not ansible_version.full is version_compare('2.5', '>=')
+  tags:
+    - always
+
+- name: "Check ansible version"
+  debug:
+    msg: "PASS | The detected Ansible version is greater than 2.5"  
+  when: ansible_version.full is version_compare('2.5', '>=')
+  tags:
+    - always
+
+- import_tasks: prelim.yml
+  become: yes
+  tags:
+    - prelim_tasks
+    - always
+
+- import_tasks: section1.yml
+  become: yes
+  when: rhel7cis_section1
+
+- import_tasks: section2.yml
+  become: yes
+  when: rhel7cis_section2
+
+- import_tasks: section3.yml
+  become: yes
+  when: rhel7cis_section3
+
+- import_tasks: section4.yml
+  become: yes
+  when: rhel7cis_section4
+
+- import_tasks: section5.yml
+  become: yes
+  when: rhel7cis_section5
+
+- import_tasks: section6.yml
+  become: yes
+  when: rhel7cis_section6
+
+- import_tasks: post.yml
+  become: yes
+  tags:
+    - post_tasks
+    - always
+
+
+
+
